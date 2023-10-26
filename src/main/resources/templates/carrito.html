@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<title>Carrito de Compras</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+
+<body>
+	<nav class="navbar navbar-expand-lg navbar-light bg-light">
+		<div class="container">
+			<a class="navbar-brand" href="#">Tu Tienda</a>
+			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+				aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse" id="navbarNav">
+				<ul class="navbar-nav">
+					<li class="nav-item">
+						<a class="nav-link" href="/Catalogo">Catálogo</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="/verCarrito">Carrito de Compras</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</nav>
+	<div class="container mt-5">
+		<h1>Carrito de Compras</h1>
+		<div th:if="${productosEnCarrito.isEmpty()}">
+			<p>Tu carrito está vacío.</p>
+		</div>
+		<div th:unless="${productosEnCarrito.isEmpty()}">
+			<table class="table">
+				<thead>
+					<tr>
+						<th>Producto</th>
+						<th>Cantidad</th>
+						<th>Precio Unitario</th>
+						<th>Precio Total</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="producto : ${productosEnCarrito}">
+						<td th:text="${producto.nombre}"></td>
+						<td th:text="${producto.cantidad}"></td>
+						<td th:text="${producto.precio}"></td>
+						<td th:text="${producto.precio * producto.cantidad}"></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<a class="btn btn-primary" href="/procesar-compra">Procesar Compra</a>
+		<a class="btn btn-secondary" href="/cancelar">Cancelar Compra</a>
+		<div th:if="${not productosEnCarrito.isEmpty()}">
+		<p id="montoTotal">Monto Total: $<span>0.00</span></p>
+	</div>
+
+	<script>
+		document.addEventListener("DOMContentLoaded", function () {
+			var items = document.querySelectorAll("tbody tr"); 
+			var total = 0.0;
+
+			
+			items.forEach(function (item) {
+				var cantidad = parseFloat(item.children[1].textContent); 
+				var precioUnitario = parseFloat(item.children[2].textContent);
+				var subtotal = cantidad * precioUnitario;
+				total += subtotal;
+			});
+
+			
+			var montoTotalElement = document.querySelector("#montoTotal span");
+			montoTotalElement.textContent = total.toFixed(2); 
+		});
+	</script>
+	</div>
+	
+	
+
+
+	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+
+</html>

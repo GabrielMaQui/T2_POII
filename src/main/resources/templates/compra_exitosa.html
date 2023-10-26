@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<title>Compra Exitosa</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+	<style>
+		.boleta {
+			border: 1px solid #000;
+			padding: 20px;
+		}
+
+		.titulo-boleta {
+			font-weight: bold;
+			text-decoration: underline;
+		}
+
+		.item-boleta {
+			margin-bottom: 10px;
+		}
+	</style>
+</head>
+
+<body>
+	<div class="container mt-5">
+		<h1>Compra Exitosa</h1>
+		<div class="boleta">
+			<h2 class="titulo-boleta">Boleta de Compra</h2>
+			<div th:each="producto : ${productosEnCarrito}" class="item-boleta">
+				<p><span th:text="${producto.nombre}"></span> - Cantidad: <span th:text="${producto.cantidad}"></span> -
+					Precio Unitario: $<span th:text="${producto.precio}"></span> - Subtotal: $<span
+						th:text="${producto.precio * producto.cantidad}"></span></p>
+			</div>
+			<p id="montoTotal">Monto Total: $<span>0.00</span></p>
+
+			<script>
+				document.addEventListener("DOMContentLoaded", function () {
+					var items = document.querySelectorAll(".item-boleta");
+					var total = 0.0;
+					items.forEach(function (item) {
+						var subtotalElement = item.querySelector("span:last-child");
+						var subtotal = parseFloat(subtotalElement.textContent);
+						total += subtotal;
+					});
+
+					// Actualiza el elemento con el monto total
+					var montoTotalElement = document.querySelector("#montoTotal span");
+					montoTotalElement.textContent = total.toFixed(2); // Formato a dos decimales
+				});
+			</script>
+		</div>
+	</div>
+	<div class="container mt-5">
+		<a class="btn btn-secondary" href="/cancelar">Retornar</a>
+	</div>
+
+	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+
+</html>
